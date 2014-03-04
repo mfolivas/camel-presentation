@@ -17,6 +17,7 @@
     </bean>
 
     <!-- configure the Camel SQL component to use the JDBC data source -->
+    <!-- configure the Camel SQL component to use the JDBC data source -->
     <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -43,7 +44,7 @@
     -->
     <camelContext xmlns="http://camel.apache.org/schema/spring">
         <!-- use Camel property placeholder loaded from the given file -->
-        <propertyPlaceholder id="placeholder" location="classpath:sql.properties"/>
+        <propertyPlaceholder id="placeholder" location="classpath:ftp.properties"/>
         <route>
             <from uri="{{ftp.server}}"/>
             <to uri="sql:{{sql.insertTicker}}" />
