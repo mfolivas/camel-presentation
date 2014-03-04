@@ -24,7 +24,7 @@
     <!-- This creates an embedded ActiveMQ Broker -->
     <broker xmlns="http://activemq.apache.org/schema/core" useJmx="true" persistent="false">
         <transportConnectors>
-            <transportConnector uri="tcp://localhost:61616"/>
+            <transportConnector uri="mv://localhost:61616"/>
         </transportConnectors>
     </broker>
 
@@ -32,7 +32,7 @@
          See http://camel.apache.org/activemq.html for more information.
     -->
     <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-        <property name="brokerURL" value="failover:tcp://localhost:61616"/>
+        <property name="brokerURL" value="failover:mv://localhost:61616"/>
     </bean>
 
     <!-- Here is a sample which processes the input files
@@ -44,23 +44,24 @@
     <camelContext xmlns="http://camel.apache.org/schema/spring">
         <!-- use Camel property placeholder loaded from the given file -->
         <propertyPlaceholder id="placeholder" location="classpath:ftp.properties"/>
-        <route id="download-ftp">
+        <!--<route id="download-ftp">
             <from uri="{{ftp.server}}"/>
-            <!--<to uri="file:target/download"/>-->
-            <unmarshal><serialization/></unmarshal>
-            <to uri="activemq:stocks.closing"/>
+            <to uri="file:target/download"/>
         </route>
-
-        <route id="persists-to-db">
-            <!--<from uri="file:target/download"/>-->
-            <from uri="activemq:stocks.closing"/>
+        -->
+        <route id="send-to-queue">
+            <from uri="file:target/download"/>
             <unmarshal><csv/></unmarshal>
             <split>
                 <simple>body</simple>
-                <to uri="sql:{{sql.insertTicker}}"/>
+                <to uri="activemq:stocks.closing"/>
             </split>
-            <log message="${body}"/>
-            <log message="saved into the db"/>
+            <log message="send to queue"/>
+        </route>
+
+        <route id="persits-to-db">
+            <from uri="activemq:stocks.closing"/>
+            <to uri="activemq:stocks.closing"/>
         </route>
 
         <!--<route>-->
