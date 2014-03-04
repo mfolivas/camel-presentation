@@ -25,15 +25,10 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
         getContext().getShutdownStrategy().setTimeout(10);
 
         //Database configuration
-        DataSource dataSource = setupDataSource();
-        SimpleRegistry reg = new SimpleRegistry();
-        reg.put("myDataSource", dataSource);
-        CamelContext context = new DefaultCamelContext(reg);
 
         from("{{ftp.server}}")
-                .setBody(constant("insert into closing_price(symbol, trading_date) values(#,#)"))
                 .to("file:target/download")
-                .to("jdbc:myDataSource")
+                .to("sql:{{sql.insertTicker}}")
                 .log("Downloaded file ${file:name} complete.");
 
 
@@ -46,7 +41,7 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
         System.out.println("*********************************************************************************");
     }
 
-    private DataSource setupDataSource() {
+    private DataSource getDataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("{{database.driver}}");
         ds.setUsername("{{database.name}}");

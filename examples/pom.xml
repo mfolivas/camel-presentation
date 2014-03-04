@@ -34,10 +34,10 @@
             <version>${camel-version}</version>
         </dependency>
 
-        <!-- the jdbc -->
+        <!-- the sql -->
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jdbc</artifactId>
+            <artifactId>camel-sql</artifactId>
             <version>${camel-version}</version>
         </dependency>
 
