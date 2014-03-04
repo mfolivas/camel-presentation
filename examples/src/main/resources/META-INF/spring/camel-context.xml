@@ -44,11 +44,11 @@
     <camelContext xmlns="http://camel.apache.org/schema/spring">
         <!-- use Camel property placeholder loaded from the given file -->
         <propertyPlaceholder id="placeholder" location="classpath:ftp.properties"/>
-        <!--<route id="download-ftp">-->
-        <!--<from uri="{{ftp.server}}"/>-->
-        <!--<to uri="file:target/download"/>-->
-        <!--<to uri="sql:{{sql.insertTicker}}" />&ndash;&gt;-->
-        <!--</route>-->
+        <route id="download-ftp">
+            <from uri="{{ftp.server}}"/>
+            <to uri="file:target/download"/>
+        </route>
+
         <route id="persists-to-db">
             <from uri="file:target/download"/>
             <unmarshal><csv/></unmarshal>
