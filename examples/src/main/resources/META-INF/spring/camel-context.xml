@@ -61,18 +61,10 @@
 
         <route id="persits-to-db">
             <from uri="activemq:stocks.closing"/>
-            <to uri="activemq:stocks.closing"/>
+            <to uri="sql:{{sql.insertTicker}}"/>
+            <log message="saved to bd"/>
         </route>
 
-        <!--<route>-->
-        <!--<from uri="{{ftp.server}}"/>-->
-        <!--<to uri="activemq:stocks.closing"/>-->
-        <!--</route>-->
-        <!--<route>-->
-        <!--<from uri="activemq:stocks.closing"/>-->
-        <!--<to uri="sql:{{sql.insertTicker}}"/>-->
-        <!--<log message="Inserted new order"/>-->
-        <!--</route>-->
     </camelContext>
 
 </beans>
