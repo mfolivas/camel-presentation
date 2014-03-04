@@ -2,6 +2,11 @@ package org.apache.camel.examples.stocks;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
+import org.apache.camel.impl.SimpleRegistry;
+import org.apache.commons.dbcp.BasicDataSource;
+
+import javax.sql.DataSource;
+
 
 /**
  * Server route
@@ -17,9 +22,17 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
         // lets shutdown faster in case of in-flight messages stack up
         getContext().getShutdownStrategy().setTimeout(10);
 
+        //Database configuration
+        DataSource dataSource = setupDataSource();
+        SimpleRegistry reg = new SimpleRegistry();
+        reg.put("myDataSource", dataSource);
+
         from("{{ftp.server}}")
+                .setBody(constant("insert into closing_price(symbol, trading_date) values(#,#)"))
                 .to("file:target/download")
+                .to("jdbc:myDataSource")
                 .log("Downloaded file ${file:name} complete.");
+
 
         // use system out so it stand out
         System.out.println("*********************************************************************************");
@@ -29,4 +42,15 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
         System.out.println("Use ctrl + c to stop this application.");
         System.out.println("*********************************************************************************");
     }
+
+    private DataSource setupDataSource() {
+        BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName("{{database.driver}}");
+        ds.setUsername("sa");
+        ds.setPassword("devon1");
+        ds.setUrl("{{database.url}}");
+        return ds;
+    }
+
+
 }
