@@ -51,10 +51,10 @@
         <!--</route>-->
         <route id="persists-to-db">
             <from uri="file:target/download"/>
-            <marshal><csv/></marshal>
-            <convertBodyTo type="Map.class"/>
-            <log message="${body}"/>
+            <unmarshal><csv/></unmarshal>
             <to uri="sql:{{sql.insertTicker}}"/>
+            <log message="saved into the db"/>
+
             <!--<to uri="sql:{{sql.insertTicker}}" />-->
         </route>
 
