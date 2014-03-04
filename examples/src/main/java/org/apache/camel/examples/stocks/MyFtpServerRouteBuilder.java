@@ -1,7 +1,9 @@
 package org.apache.camel.examples.stocks;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -26,6 +28,7 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
         DataSource dataSource = setupDataSource();
         SimpleRegistry reg = new SimpleRegistry();
         reg.put("myDataSource", dataSource);
+        CamelContext context = new DefaultCamelContext(reg);
 
         from("{{ftp.server}}")
                 .setBody(constant("insert into closing_price(symbol, trading_date) values(#,#)"))
@@ -46,8 +49,8 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
     private DataSource setupDataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("{{database.driver}}");
-        ds.setUsername("sa");
-        ds.setPassword("devon1");
+        ds.setUsername("{{database.name}}");
+        ds.setPassword("{{database.password}}");
         ds.setUrl("{{database.url}}");
         return ds;
     }

@@ -41,6 +41,13 @@
             <version>${camel-version}</version>
         </dependency>
 
+        <!-- the ftp -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-ftp</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
+
         <!-- the ActiveMQ client with connection pooling -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
