@@ -46,11 +46,14 @@
         <propertyPlaceholder id="placeholder" location="classpath:ftp.properties"/>
         <route id="download-ftp">
             <from uri="{{ftp.server}}"/>
-            <to uri="file:target/download"/>
+            <!--<to uri="file:target/download"/>-->
+            <unmarshal><serialization/></unmarshal>
+            <to uri="activemq:stocks.closing"/>
         </route>
 
         <route id="persists-to-db">
-            <from uri="file:target/download"/>
+            <!--<from uri="file:target/download"/>-->
+            <from uri="activemq:stocks.closing"/>
             <unmarshal><csv/></unmarshal>
             <split>
                 <simple>body</simple>
