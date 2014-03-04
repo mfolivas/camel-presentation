@@ -51,6 +51,7 @@
 
         <route id="persists-to-db">
             <from uri="file:target/download"/>
+            <unmarshal><csv/></unmarshal>
             <to uri="sql:{{sql.insertTicker}}" />
             <log message="Inserted new order}"/>
         </route>
