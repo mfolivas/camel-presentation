@@ -4,8 +4,12 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.util.jndi.JndiContext;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
@@ -23,8 +27,6 @@ public class MyFtpServerRouteBuilder extends RouteBuilder {
 
         // lets shutdown faster in case of in-flight messages stack up
         getContext().getShutdownStrategy().setTimeout(10);
-
-        //Database configuration
 
         from("{{ftp.server}}")
                 .to("file:target/download")
