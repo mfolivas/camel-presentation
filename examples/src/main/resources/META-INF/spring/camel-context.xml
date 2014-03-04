@@ -46,13 +46,15 @@
         <propertyPlaceholder id="placeholder" location="classpath:ftp.properties"/>
         <route id="download-ftp">
             <from uri="{{ftp.server}}"/>
-            <to uri="file:target/download"/>
+            <marshal><csv/></marshal>
+            <convertBodyTo type="String.class"/>
+            <to uri="sql:{{sql.insertTicker}}" />
         </route>
 
         <route id="persists-to-db">
             <from uri="file:target/download"/>
-            <unmarshal><csv/></unmarshal>
-            <to uri="sql:{{sql.insertTicker}}" />
+
+
             <log message="Inserted new order}"/>
         </route>
         <!--<route>-->
