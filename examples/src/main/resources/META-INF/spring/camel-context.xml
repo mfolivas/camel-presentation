@@ -52,6 +52,14 @@
         <route id="persists-to-db">
             <from uri="file:target/download"/>
             <unmarshal><csv/></unmarshal>
+            <split streaming="true">
+                <tokenize token="\\n" group="1"/>
+                <unmarshal><csv/></unmarshal>
+            </split>
+            <transform>
+                <simple>${body[0]}</simple>
+            </transform>
+            <log message="${body}"/>
             <to uri="sql:{{sql.insertTicker}}"/>
             <log message="saved into the db"/>
 
